@@ -1,14 +1,14 @@
 package bombermann;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Game;
 
-public class bombermann {
+public class bombermann extends Game {
 
-private Vector2 vector;
-	
-	public static void main(String[] args) {
+
+	@Override
+	public void create() {
 		// TODO Auto-generated method stub
-		System.out.println("awef");
+		setScreen(new GameScreen());
 		
 	}
 
