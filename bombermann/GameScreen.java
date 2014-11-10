@@ -23,6 +23,8 @@ public class GameScreen implements Screen, InputProcessor {
 	public void render(float arg0) {
 		// TODO Auto-generated method stub
 		
+		renderer.render();
+		
 	}
 	
 	@Override
