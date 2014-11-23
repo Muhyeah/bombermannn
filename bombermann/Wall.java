@@ -1,16 +1,12 @@
 package bombermann;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 public class Wall extends Block{
-
-	public Wall() {
-		Texture texture = new Texture(Gdx.files.local("src/assets/wall.png"));
-		
-		super(true, texture);
+	
+	public Wall(Vector2 pos) {		
+		super(true, pos, "wall");
 		
 	}
-	
-	
 }

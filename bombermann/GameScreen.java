@@ -1,9 +1,9 @@
 package bombermann;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-
-
 
 public class GameScreen implements Screen, InputProcessor {
 
@@ -17,6 +17,8 @@ public class GameScreen implements Screen, InputProcessor {
 		state = new State();
 		renderer = new Renderer(state);
 		input = new Input(state);
+
+        Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -30,18 +32,24 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean keyDown(int arg0) {
 		// TODO Auto-generated method stub
-		return false;
+		
+		
+		Player p1 = (Player) state.getTiles()[0];
+		p1.setNextmove(Player.keyTokey(arg0));
+		
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
+		Player p1 = (Player) state.getTiles()[0];
 	
-	
-	
+		if(p1.getNextmove() == Player.keyTokey(arg0)){
+			p1.setNextmove(0);
+		}
+		return true;
+	}
 	
 	@Override
 	public boolean keyTyped(char arg0) {

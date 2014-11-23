@@ -1,17 +1,91 @@
 package bombermann;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 // Fælles karakteristika ved alle objekter på pladen
 
 public class Block {
-	private boolean solid;
-
-	private Texture texture;
 	
-	public Block(boolean solid, Texture texture){
+
+	public final static int UP = 1111; 
+	public final static int DOWN = 1112; 
+	public final static int LEFT = 1113; 
+	public final static int RIGHT = 1114;
+
+	public final static Vector2 VUP = new Vector2(0, 100);
+	public final static Vector2 VDOWN = new Vector2(0, -100);
+	public final static Vector2 VLEFT = new Vector2(-100, 0);
+	public final static Vector2 VRIGHT = new Vector2(100, 0);
+	
+	private Texture texture;
+	private Vector2 pos;
+	private boolean solid;
+	private String type;
+
+
+
+	public boolean collides(int dir, Block[] tiles) {
+		boolean rtv = false;
+		for(Block b:tiles){
+			if(b == null){
+				break;
+			}
+			switch(dir){
+			case UP:
+				if(new Vector2(pos).add(VUP).equals(b.pos))
+					rtv = true;
+				break;
+			case DOWN:
+				if(new Vector2(pos).add(VDOWN).equals(b.pos))
+					rtv = true;
+				break;
+			case LEFT:
+				if(new Vector2(pos).add(VLEFT).equals(b.pos))
+					rtv = true;
+				break;
+			case RIGHT:
+				if(new Vector2(pos).add(VRIGHT).equals(b.pos))
+					rtv = true;
+				break;
+			default:
+				break;
+			}
+			
+		}
+		
+		return rtv;
+	}
+	
+	public Texture getTexture() {
+		return texture;
+	}
+	
+	public void setTexture(Texture t) {
+		this.texture = t;
+	}
+
+	public Vector2 getPos() {
+		return pos;
+	}
+
+	public void setPos(Vector2 pos) {
+		this.pos = pos;
+	}
+
+	public boolean isSolid() {
+		return solid;
+	}
+	
+	public String getType(){
+		return type;
+	}
+
+	public Block(boolean solid, Vector2 pos, String type){
 		this.solid = solid;
-		this.texture = texture;
+		this.pos = pos;
+		this.type = type;
+		
 	}
 	
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 // Omsætter information til grafik
 
@@ -21,6 +22,9 @@ public class Renderer {
 	private Sprite sprite;
 
 	private Texture wall;
+	private Texture p0;
+	
+	private long prevtime;
 	
 	public Renderer(State state) {
 		this.state = state;
@@ -36,11 +40,29 @@ public class Renderer {
 		batch.setProjectionMatrix(camera.combined);
 
 		wall = new Texture(Gdx.files.local("src/assets/wall.png"));
+		p0 = new Texture(Gdx.files.local("src/assets/pp.png"));
+		
+		Block[] tiles = state.getTiles();
+		for(Block b:tiles){
+			if(b == null){
+				break;
+			}
+
+			if(b.getType().equals("wall")){
+				b.setTexture(wall);
+			}
+			
+			if(b.getType().equals("player0")){
+				b.setTexture(p0);
+			}
+			
+			if(b.getType().equals("player1")){
+				b.setTexture(p0);
+			}
+		}
 	}
 	
 	public void render(){
-		
-		System.out.println(h/w);
 
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
@@ -52,20 +74,20 @@ public class Renderer {
 		Gdx.gl20.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 		
 		batch.begin();
-		for(float j=0;j<900;j+=200){
-			for(float i=0;i<1300;i+=200){
-				batch.draw(wall, i, j, 100f, 100f);
+		
+		Block[] tiles = state.getTiles();
+				
+		for(Block b: tiles){
+			if(b == null){
+				break;
 			}
+			Vector2 v = b.getPos();
+			batch.draw(b.getTexture(), v.x, v.y, 100f, 100f);
 		}
-
-		for(float x=0;x<900;x+=100){
-			batch.draw(wall, 0f, x, 100f, 100f);
-			batch.draw(wall, 1200f, x, 100f, 100f);
-		}
-
-		for(float x=0;x<1300;x+=100){
-			batch.draw(wall, x, 0f, 100f, 100f);
-			batch.draw(wall, x, 800f, 100f, 100f);
+		
+		if((System.currentTimeMillis() - prevtime)>100){
+			prevtime = System.currentTimeMillis();
+			state.update();
 		}
 		
 		batch.end();
