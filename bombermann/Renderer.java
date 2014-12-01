@@ -24,6 +24,7 @@ public class Renderer {
 	private Texture wall;
 	private Texture bomb;
 	private Texture p0;
+	private Texture p2;
 	
 	private long prevtime;
 	
@@ -43,6 +44,7 @@ public class Renderer {
 		wall = new Texture(Gdx.files.local("src/assets/wall.png"));
 		bomb = new Texture(Gdx.files.local("src/assets/bomb.png"));
 		p0 = new Texture(Gdx.files.local("src/assets/pp.png"));
+		p2 = new Texture(Gdx.files.local("src/assets/pp2.png"));
 		
 		Block[] tiles = state.getTiles();
 		for(Block b:tiles){
@@ -59,7 +61,7 @@ public class Renderer {
 			}
 			
 			if(b.getType().equals("player1")){
-				b.setTexture(p0);
+				b.setTexture(p2);
 			}
 		}
 	}
