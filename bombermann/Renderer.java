@@ -22,6 +22,7 @@ public class Renderer {
 	private Sprite sprite;
 
 	private Texture wall;
+	private Texture bomb;
 	private Texture p0;
 	
 	private long prevtime;
@@ -40,6 +41,7 @@ public class Renderer {
 		batch.setProjectionMatrix(camera.combined);
 
 		wall = new Texture(Gdx.files.local("src/assets/wall.png"));
+		bomb = new Texture(Gdx.files.local("src/assets/bomb.png"));
 		p0 = new Texture(Gdx.files.local("src/assets/pp.png"));
 		
 		Block[] tiles = state.getTiles();
@@ -85,13 +87,19 @@ public class Renderer {
 			batch.draw(b.getTexture(), v.x, v.y, 100f, 100f);
 		}
 		
-		if((System.currentTimeMillis() - prevtime)>100){
+		if((System.currentTimeMillis() - prevtime)>30){
 			prevtime = System.currentTimeMillis();
 			state.update();
 		}
 		
 		batch.end();
 		
+	}
+	
+	public void setTexture(Block b, String type){
+		if(type.equals("bomb")){
+			b.setTexture(bomb);
+		}
 	}
 
 }

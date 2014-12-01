@@ -6,30 +6,34 @@ public class State {
 
 	private Block[] tiles;
 	private long prevtime;
+	private int cycle; //0, 1, 2
+	private int tilescount;
+	private Renderer renderer;
 	
 	public State(){
-		tiles = new Block[120];
+		cycle = 0;
+		tiles = new Block[1000];
 
 		tiles[0] = new Player(0);
 		tiles[1] = new Player(1);
 
-		int count = 2;
+		tilescount = 2;
 		
 		for(int y=0;y<9;y+=2){
 			for(int x=0;x<13;x+=2){
-				tiles[count++] = new Wall(new Vector2(x*100f, y*100f));
+				tiles[tilescount++] = new Wall(new Vector2(x*100f, y*100f));
 				
 			}
 		}
 
 		for(float y=0;y<9;y++){
-			tiles[count++] = new Wall(new Vector2(0f, y*100f));
-			tiles[count++] = new Wall(new Vector2(1200f, y*100f));
+			tiles[tilescount++] = new Wall(new Vector2(0f, y*100f));
+			tiles[tilescount++] = new Wall(new Vector2(1200f, y*100f));
 		}
 
 		for(float x=0;x<13;x++){
-			tiles[count++] = new Wall(new Vector2(x*100f, 0f));
-			tiles[count++] = new Wall(new Vector2(x*100f, 800f));
+			tiles[tilescount++] = new Wall(new Vector2(x*100f, 0f));
+			tiles[tilescount++] = new Wall(new Vector2(x*100f, 800f));
 		}
 		
 		prevtime = System.currentTimeMillis();
@@ -46,94 +50,77 @@ public class State {
 	public void update() {
 		
 
-		Player p = (Player) tiles[0];
-		int dir = p.getNextmove();
-
-		System.out.println(p.getPos());
-		
-		if(!p.collides(dir, tiles)){
+		if(cycle++ == 2){
 			
-			switch(dir){
-			case Player.UP:
-				p.setPos(p.getPos().add(0, 100));
-				break;
-			case Player.DOWN:
-				p.setPos(p.getPos().add(0, -100));
-				break;
-			case Player.LEFT:
-				p.setPos(p.getPos().add(-100, 0));
-				break;
-			case Player.RIGHT:
-				p.setPos(p.getPos().add(100, 0));
-				break;
+			for(int i = 0;i<2;i++){
+
+				Player p = (Player) tiles[i];
+				int dir = p.getNextmove();
+				
+				if(p.isDropbomb()){
+					BlockBomb b = new BlockBomb(new Vector2(p.getPos()));
+					renderer.setTexture(b, "bomb");
+					tiles[tilescount++] = b;
+					p.setDropbomb(false);
+				}
+
+				for(Block b: tiles){
+					if(b==null)
+						continue;
+					if(b.getType().equals("bomb")){
+						BlockBomb bomb = (BlockBomb) b;
+						if(bomb.isExplosion()){
+							b.setPos(Block.GONE);
+						}
+						else if(bomb.canExplode()){
+							bomb.explode();
+						}
+						else {
+							bomb.countdown();
+						}
+					}
+				}
+				
+				
+				boolean[] keys = p.getKeyspressed();
+				if(!keys[dir]){
+					dir = 0;
+					p.setNextmove(0);
+					for(int key=Block.UP;key<=Block.RIGHT;key++){
+						if(keys[key]==true){
+							dir = key;
+						}
+					}
+				}
+				
+				if(!p.collides(dir, tiles)){
+					
+					switch(dir){
+					case Player.UP:
+						p.setPos(p.getPos().add(0, 100));
+						break;
+					case Player.DOWN:
+						p.setPos(p.getPos().add(0, -100));
+						break;
+					case Player.LEFT:
+						p.setPos(p.getPos().add(-100, 0));
+						break;
+					case Player.RIGHT:
+						p.setPos(p.getPos().add(100, 0));
+						break;
+					}
+				}
 			}
+
+		
+			cycle = 0;
 		}
 		
-		/*
-		Player p = (Player) tiles[0];
-		int dir = p.getMovedir();
-		
-		System.out.println(dir + "  " + p.getMoveproces());
-		switch (p.getMoveproces()){
-		case 0:
-			p.setMovedir(p.getNextmove());
-			
-			switch(dir){
-			case Player.UP:
-				p.setPos(p.getPos().add(0, 33));
-				break;
-			case Player.DOWN:
-				p.setPos(p.getPos().add(0, -33));
-				break;
-			case Player.LEFT:
-				p.setPos(p.getPos().add(-33, 0));
-				break;
-			case Player.RIGHT:
-				p.setPos(p.getPos().add(33, 0));
-				break;
-			}
-			p.setMoveproces(1);
-			break;
-			
-		case 1:
-			switch(dir){
-			case Player.UP:
-				p.setPos(p.getPos().add(0, 33));
-				break;
-			case Player.DOWN:
-				p.setPos(p.getPos().add(0, -33));
-				break;
-			case Player.LEFT:
-				p.setPos(p.getPos().add(-33, 0));
-				break;
-			case Player.RIGHT:
-				p.setPos(p.getPos().add(33, 0));
-				break;
-			}
-			p.setMoveproces(2);
-			break;
-			
-		case 2:
+	}
 
-			switch(dir){
-			case Player.UP:
-				p.setPos(p.getPos().add(0, 34));
-				break;
-			case Player.DOWN:
-				p.setPos(p.getPos().add(0, -34));
-				break;
-			case Player.LEFT:
-				p.setPos(p.getPos().add(-34, 0));
-				break;
-			case Player.RIGHT:
-				p.setPos(p.getPos().add(34, 0));
-				break;
-			}
-			p.setMoveproces(0);
-			break;
-		}*/
-		
-		
+	public void setRenderer(Renderer renderer) {
+		// TODO Auto-generated method stub
+		this.renderer = renderer;
 	}
 	
 }

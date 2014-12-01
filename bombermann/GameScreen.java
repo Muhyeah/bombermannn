@@ -16,6 +16,7 @@ public class GameScreen implements Screen, InputProcessor {
 		// TODO Auto-generated method stub
 		state = new State();
 		renderer = new Renderer(state);
+		state.setRenderer(renderer);
 		input = new Input(state);
 
         Gdx.input.setInputProcessor(this);
@@ -32,22 +33,50 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public boolean keyDown(int arg0) {
 		// TODO Auto-generated method stub
-		
-		
+
 		Player p1 = (Player) state.getTiles()[0];
-		p1.setNextmove(Player.keyTokey(arg0));
+		Player p2 = (Player) state.getTiles()[1];
+		int key = Player.keyTokey(arg0);
+		Player p;
+		if(Player.isp2(arg0)){
+			p = p2;
+		}
+		else {
+			p = p1;
+		}
+		switch(key){
+		case Player.UP:
+		case Player.DOWN:
+		case Player.LEFT:
+		case Player.RIGHT:
+			p.setNextmove(key);
+			p.setKeyspressed(key, true);
+			break;
+		case Keys.SPACE:
+			p1.setDropbomb(true);
+			break;
+		case Keys.NUM_1:
+			p2.setDropbomb(true);
+			break;
+		}
 		
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int arg0) {
-
 		Player p1 = (Player) state.getTiles()[0];
-	
-		if(p1.getNextmove() == Player.keyTokey(arg0)){
-			p1.setNextmove(0);
+		Player p2 = (Player) state.getTiles()[1];
+		int key = Player.keyTokey(arg0);
+		Player p;
+		if(Player.isp2(arg0)){
+			p = p2;
 		}
+		else {
+			p = p1;
+		}
+		p.setKeyspressed(key, false);
+		
 		return true;
 	}
 	
