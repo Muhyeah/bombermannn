@@ -9,9 +9,12 @@ public class State {
 	private int cycle; //0, 1, 2
 	private int tilescount;
 	private Renderer renderer;
+	private boolean running;
+	private String winner;
 	
 	public State(){
 		cycle = 0;
+		running = true;
 		tiles = new Block[1000];
 
 		tiles[0] = new Player(0);
@@ -69,14 +72,9 @@ public class State {
 						continue;
 					if(b.getType().equals("bomb")){
 						BlockBomb bomb = (BlockBomb) b;
-						if(bomb.isExplosion()){
-							b.setPos(Block.GONE);
-						}
-						else if(bomb.canExplode()){
-							bomb.explode();
-						}
-						else {
-							bomb.countdown();
+						if(bomb.countdown() <= 0){
+							bomb.setPos(Block.GONE);
+							bomb.stop();
 						}
 					}
 				}
@@ -117,10 +115,23 @@ public class State {
 		}
 		
 	}
+	
+	public boolean getRunning(){
+		return running;
+	}
+	public String getWinner(){
+		return winner;
+	}
 
 	public void setRenderer(Renderer renderer) {
 		// TODO Auto-generated method stub
 		this.renderer = renderer;
+	}
+
+	public void gg(String type) {
+		// TODO Auto-generated method stub
+		winner = type;
+		running = false;
 	}
 	
 }
