@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 public class State {
 
 	private Block[] tiles;
-	private long prevtime;
 	private int cycle; //0, 1, 2
 	private int tilescount;
 	private Renderer renderer;
@@ -39,7 +38,6 @@ public class State {
 			tiles[tilescount++] = new Wall(new Vector2(x*100f, 800f));
 		}
 		
-		prevtime = System.currentTimeMillis();
 	}
 
 	public Block[] getTiles() {

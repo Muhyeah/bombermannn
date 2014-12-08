@@ -32,7 +32,6 @@ public class Block {
 
 
 	public boolean collides(int dir, Block[] tiles) {
-		boolean rtv = false;
 		for(Block b:tiles){
 			if(b == null){
 				break;
@@ -40,19 +39,19 @@ public class Block {
 			switch(dir){
 			case UP:
 				if(new Vector2(pos).add(VUP).equals(b.pos))
-					rtv = true;
+					return true;
 				break;
 			case DOWN:
 				if(new Vector2(pos).add(VDOWN).equals(b.pos))
-					rtv = true;
+					return true;
 				break;
 			case LEFT:
 				if(new Vector2(pos).add(VLEFT).equals(b.pos))
-					rtv = true;
+					return true;
 				break;
 			case RIGHT:
 				if(new Vector2(pos).add(VRIGHT).equals(b.pos))
-					rtv = true;
+					return true;
 				break;
 			default:
 				break;
@@ -60,7 +59,7 @@ public class Block {
 			
 		}
 		
-		return rtv;
+		return false;
 	}
 	
 	public Texture getTexture() {

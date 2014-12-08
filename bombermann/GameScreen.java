@@ -9,7 +9,6 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private State state;
 	private Renderer renderer;
-	private Input input;
 
 	@Override
 	public void show() {
@@ -17,7 +16,6 @@ public class GameScreen implements Screen, InputProcessor {
 		state = new State();
 		renderer = new Renderer(state);
 		state.setRenderer(renderer);
-		input = new Input(state);
 
         Gdx.input.setInputProcessor(this);
 	}
