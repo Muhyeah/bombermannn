@@ -35,7 +35,7 @@ public class Player extends Block {
 	}
 
 	public Player(int i){
-		super(false, i==0? new Vector2(100f, 100f):new Vector2(500f, 100f), "player"+i);
+		super(false, i==0? new Vector2(100f, 700f):new Vector2(1100f, 100f), "player"+i);
 
 		keyspressed = new boolean[2000];
 		nextmove = 0;
